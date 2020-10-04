@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Middleware.Api
 {
     public static class RequestManager
     {
-        public static void RequestIdentifier(this IApplicationBuilder app, string requestType, Uri requestTargetUri, string sourceRequest, 
+        public static IApplicationBuilder IoTListenerMiddlewareExtension(this IApplicationBuilder builder, string requestType, Uri requestTargetUri, string sourceRequest, 
             HttpMethod methodType, object model, string connectionString)
         {
-
+            return builder.UseMiddleware<IoTListenerMiddleware>();
         }
     }
 }

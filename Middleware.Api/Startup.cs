@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +42,8 @@ namespace Middleware.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.IoTListenerMiddlewareExtension("test", new Uri("http://localhost:60993"), "", HttpMethod.Post, "another string", "connection string");
 
             app.UseEndpoints(endpoints =>
             {
