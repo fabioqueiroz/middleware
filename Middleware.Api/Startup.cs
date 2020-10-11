@@ -43,7 +43,7 @@ namespace Middleware.Api
 
             app.UseAuthorization();
 
-            app.IoTListenerMiddlewareExtension("test", new Uri("http://localhost:60993"), "", HttpMethod.Post, "another string", "connection string");
+            app.UseIoTListenerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

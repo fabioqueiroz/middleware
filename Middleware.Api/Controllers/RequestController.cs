@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Middleware.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,12 @@ namespace Middleware.Api.Controllers
 
         [HttpGet]
         public IActionResult Get()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult PostTest([FromBody] RequestModel requestModel)
         {
             return Ok();
         }

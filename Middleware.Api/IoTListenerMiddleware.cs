@@ -1,8 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Middleware.Api
@@ -18,23 +24,50 @@ namespace Middleware.Api
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var cultureQuery = context.Request.Query["culture"];
-            if (!string.IsNullOrWhiteSpace(cultureQuery))
-            {
-                var culture = new CultureInfo(cultureQuery);
+            // 1) Detect the incoming method
+            var requestMethod = context.Request.Method;
 
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
+            // 2) detect the Url
+            var url = context.Request.Host.Value + context.Request.Path.Value;
+
+            // 3) get the body from this request
+            var requestBody = context.Request.HttpContext.Request;
+            requestBody.EnableBuffering();
+
+            var bodyString = string.Empty;
+            using (var reader = new StreamReader(requestBody.Body, Encoding.UTF8, true, 1024, true))
+            {
+                bodyString = await reader.ReadToEndAsync();
             }
 
-            // 1) Detect the incoming method
-            // 2) detect the Url
-            // 3) get the body from this request
+            requestBody.Body.Position = 0;
+
+            var regex = new Regex(@"\b(?<word>\w+)"); // @"\b[A-Za-z|0-9]\w+";
+            var result = DataDictionary(bodyString, regex);
+            
             // 4) map the body of the response
+            var response = new ExpandoObject();
+
             // 5) persist in to the db
 
-            // Call the next delegate/middleware in the pipeline
+
             await _next(context);
+        }
+
+        private IDictionary DataDictionary(string bodyString, Regex regex)
+        {
+            var matches = regex.Matches(bodyString);
+            var result = new Dictionary<string, object>();
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    result.Add(matches[i].Value, matches[i + 1].Value);
+                }
+            }
+
+            return result;
         }
     }
 }

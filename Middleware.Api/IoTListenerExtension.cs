@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Middleware.Api
 {
-    public static class RequestManager
+    public static class IoTListenerExtension
     {
-        public static IApplicationBuilder IoTListenerMiddlewareExtension(this IApplicationBuilder builder, string requestType, Uri requestTargetUri, string sourceRequest, 
-            HttpMethod methodType, object model, string connectionString)
+        public static IApplicationBuilder UseIoTListenerMiddleware(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<IoTListenerMiddleware>();
         }
