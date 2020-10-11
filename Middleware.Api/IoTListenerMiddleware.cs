@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Middleware.Api.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Middleware.Api
 {
-    public class IoTListenerMiddleware
+    public class IoTListenerMiddleware//<T> where T : class
     {
         private readonly RequestDelegate _next;
 
@@ -42,32 +43,37 @@ namespace Middleware.Api
 
             requestBody.Body.Position = 0;
 
-            var regex = new Regex(@"\b(?<word>\w+)"); // @"\b[A-Za-z|0-9]\w+";
-            var result = DataDictionary(bodyString, regex);
-            
+            var deserializedBody = JsonConvert.DeserializeObject<object>(bodyString);
+
             // 4) map the body of the response
-            var response = new ExpandoObject();
+            // this is supposed to split all the properties and values in the deserialized body
+            var response = new ExpandoObject(); 
+
+            // next step: map the expando obj using reflection to a concrete class
+            // https://stackoverflow.com/questions/3862226/how-to-dynamically-create-a-class
 
             // 5) persist in to the db
-
 
             await _next(context);
         }
 
-        private IDictionary DataDictionary(string bodyString, Regex regex)
-        {
-            var matches = regex.Matches(bodyString);
-            var result = new Dictionary<string, object>();
+        //private IDictionary DataDictionary(string bodyString, Regex regex)
+        //{
+        //    //var regex = new Regex(@"\b(?<word>\w+)"); // @"\b[A-Za-z|0-9]\w+";
+        //    //var result = DataDictionary(bodyString, regex);
 
-            for (int i = 0; i < matches.Count; i++)
-            {
-                if (i % 2 == 0)
-                {
-                    result.Add(matches[i].Value, matches[i + 1].Value);
-                }
-            }
+        //    var matches = regex.Matches(bodyString);
+        //    var result = new Dictionary<string, object>();
 
-            return result;
-        }
+        //    for (int i = 0; i < matches.Count; i++)
+        //    {
+        //        if (i % 2 == 0)
+        //        {
+        //            result.Add(matches[i].Value, matches[i + 1].Value);
+        //        }
+        //    }
+
+        //    return result;
+        //}
     }
 }
