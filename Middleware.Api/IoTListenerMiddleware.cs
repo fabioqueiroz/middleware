@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
 using Middleware.Api.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,14 +46,27 @@ namespace Middleware.Api
 
             requestBody.Body.Position = 0;
 
-            var deserializedBody = JsonConvert.DeserializeObject<object>(bodyString);
+            var deserializedBody = JsonConvert.DeserializeObject<JObject>(bodyString);
 
             // 4) map the body of the response
-            // this is supposed to split all the properties and values in the deserialized body
-            var response = new ExpandoObject(); 
+            var dynamicDictionary = new Dictionary<string, object>();
+            dynamic response;
 
-            // next step: map the expando obj using reflection to a concrete class
-            // https://stackoverflow.com/questions/3862226/how-to-dynamically-create-a-class
+            if (deserializedBody != null && deserializedBody.HasValues)
+            {
+                dynamicDictionary = deserializedBody.ToObject<Dictionary<string, object>>();
+
+                //dynamic expando = deserializedBody.ToObject<ExpandoObject>();
+                
+                dynamic builder = DynamicTypeBuilder.CreateNewObject(dynamicDictionary);
+
+                foreach (KeyValuePair<string, object> kv in dynamicDictionary)
+                {
+                    var key = kv.Key;
+                    var value = kv.Value;
+                }
+
+            }
 
             // 5) persist in to the db
 
