@@ -11,6 +11,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -50,27 +51,41 @@ namespace Middleware.Api
 
             // 4) map the body of the response
             var dynamicDictionary = new Dictionary<string, object>();
-            dynamic response;
+
+            dynamic response = new ExpandoObject();
 
             if (deserializedBody != null && deserializedBody.HasValues)
             {
                 dynamicDictionary = deserializedBody.ToObject<Dictionary<string, object>>();
 
                 //dynamic expando = deserializedBody.ToObject<ExpandoObject>();
-                
+
                 dynamic builder = DynamicTypeBuilder.CreateNewObject(dynamicDictionary);
 
-                foreach (KeyValuePair<string, object> kv in dynamicDictionary)
-                {
-                    var key = kv.Key;
-                    var value = kv.Value;
-                }
-
+                Type dynamicType = builder.GetType();
+                var rtProperties = dynamicType.GetRuntimeProperties().ToList();
+                var newObj = Activator.CreateInstance(dynamicType);
+                AssignDynamicValues(newObj, rtProperties, dynamicDictionary);
             }
+           
 
             // 5) persist in to the db
 
             await _next(context);
+        }
+
+        private void AssignDynamicValues(object objToMap, List<PropertyInfo> runTimeProperties, Dictionary<string, object> deserializedValues)
+        {
+            foreach (KeyValuePair<string, object> kv in deserializedValues)
+            {
+                foreach (var property in runTimeProperties)
+                {
+                    if (property.Name.Equals(kv.Key))
+                    {
+                        property.SetValue(objToMap, kv.Value);
+                    }
+                }
+            }
         }
 
         //private IDictionary DataDictionary(string bodyString, Regex regex)
@@ -91,5 +106,6 @@ namespace Middleware.Api
 
         //    return result;
         //}
+
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Middleware.Data.Access;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 
-namespace Middleware.Api
+namespace Middleware.Data.Access
 {
     public class Context<T> : DbContext where T : class
     {
@@ -20,5 +21,7 @@ namespace Middleware.Api
         {
             modelBuilder.Entity<T>();
         }
+
+        //public DbSet<TestData> TestDataTable { get; set; }
     }
 }
