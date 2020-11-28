@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Middleware.Api.Models;
+using Middleware.Data.Access;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,6 +15,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,10 +25,14 @@ namespace Middleware.Api
     public class IoTListenerMiddleware//<T> where T : class
     {
         private readonly RequestDelegate _next;
-
-        public IoTListenerMiddleware(RequestDelegate next)
+        private readonly IApplicationBuilder _applicationBuilder;
+        private readonly IServiceProvider _serviceProvider;
+   
+        public IoTListenerMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
         {
             _next = next;
+            _serviceProvider = serviceProvider;
+            _applicationBuilder = new ApplicationBuilder(_serviceProvider);
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -66,12 +74,44 @@ namespace Middleware.Api
                 var rtProperties = dynamicType.GetRuntimeProperties().ToList();
                 var newObj = Activator.CreateInstance(dynamicType);
                 AssignDynamicValues(newObj, rtProperties, dynamicDictionary);
-            }
-           
 
-            // 5) persist in to the db
+                // 5) persist into the db
+
+                PersistInDb<Middleware.Api.Device>(newObj);
+
+            }
 
             await _next(context);
+        }
+
+        private void PersistInDb<T>(object dynamicObj) where T : class
+        {
+            try
+            {
+                Context<T> context;
+
+                using var serviceScope = _applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+                context = serviceScope.ServiceProvider.GetRequiredService<Context<T>>();
+
+                context.Database.EnsureCreated();
+
+                try
+                {
+                    context.Add<Middleware.Api.Device>((Middleware.Api.Device)dynamicObj);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void AssignDynamicValues(object objToMap, List<PropertyInfo> runTimeProperties, Dictionary<string, object> deserializedValues)
@@ -86,26 +126,6 @@ namespace Middleware.Api
                     }
                 }
             }
-        }
-
-        //private IDictionary DataDictionary(string bodyString, Regex regex)
-        //{
-        //    //var regex = new Regex(@"\b(?<word>\w+)"); // @"\b[A-Za-z|0-9]\w+";
-        //    //var result = DataDictionary(bodyString, regex);
-
-        //    var matches = regex.Matches(bodyString);
-        //    var result = new Dictionary<string, object>();
-
-        //    for (int i = 0; i < matches.Count; i++)
-        //    {
-        //        if (i % 2 == 0)
-        //        {
-        //            result.Add(matches[i].Value, matches[i + 1].Value);
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
+        }      
     }
 }

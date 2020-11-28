@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Middleware.Data.Access;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +16,19 @@ namespace Middleware.Api
         {
             return builder.UseMiddleware<IoTListenerMiddleware>();
         }
+
+        //public static IApplicationBuilder UseIoTListenerMiddleware<T>(this IApplicationBuilder builder) where T : class
+        //{
+        //    Context<T> context;
+
+        //    using (var serviceScope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+        //    {
+        //        context = serviceScope.ServiceProvider.GetRequiredService<Context<T>>();
+
+        //        context.Database.EnsureCreated();
+        //    }
+
+        //    return builder.UseMiddleware<IoTListenerMiddleware>();
+        //}
     }
 }

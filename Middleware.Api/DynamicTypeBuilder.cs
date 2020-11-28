@@ -41,9 +41,13 @@ namespace Middleware.Api
         private static TypeBuilder GetTypeBuilder()
         {
             var typeSignature = "EntityDynamicType";
-            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeSignature), AssemblyBuilderAccess.Run);
+            //AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeSignature), AssemblyBuilderAccess.Run);
+            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeof(Device).FullName), AssemblyBuilderAccess.Run);
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("EntityModule");
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
+            //TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
+            //        TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout,
+            //        null);
+            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(Device).Name,
                     TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout,
                     null);
 

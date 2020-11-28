@@ -30,7 +30,7 @@ namespace Middleware.Api
         {
             services.AddControllers();
 
-            services.AddDbContext<Context<object>>(options =>
+            services.AddDbContext<Context<Device>>(options =>
                options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection"), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
 
@@ -50,6 +50,7 @@ namespace Middleware.Api
 
             app.UseAuthorization();
 
+            //app.UseIoTListenerMiddleware<object>();
             app.UseIoTListenerMiddleware();
 
             app.UseEndpoints(endpoints =>
