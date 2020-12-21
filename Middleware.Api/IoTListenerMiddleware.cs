@@ -64,18 +64,19 @@ namespace Middleware.Api
             {
                 dynamicDictionary = deserializedBody.ToObject<Dictionary<string, object>>();
 
-                //dynamic expando = deserializedBody.ToObject<ExpandoObject>();
-
                 // Create a class at runtime
                 dynamic builder = DynamicTypeBuilder.CreateNewObject(dynamicDictionary);
                 Type dynamicType = builder.GetType();
                 var rtProperties = dynamicType.GetRuntimeProperties().ToList();
                 var newObj = Activator.CreateInstance(dynamicType);
                 AssignDynamicValues(newObj, rtProperties, dynamicDictionary);
-
+              
                 // 5) persist into the db - **** UNABLE TO CAST RUNTTIME GENERATED CLASS, EF DOES NOT RECOGNISE THE CLASS AS BEING THE SAME ****
-                PersistInDb<Middleware.Api.Device>(newObj);
+                //PersistInDb<Middleware.Api.Device>(newObj);
             }
+
+            // move logic to the observer to persist the device
+            //var device = JsonConvert.DeserializeObject<Device>(bodyString);
 
             await _next(context);
         }
