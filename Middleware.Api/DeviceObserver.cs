@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace Middleware.Api
 {
@@ -20,14 +21,18 @@ namespace Middleware.Api
     {
         private readonly IOptions<HttpMiddlewareInterceptor> _options;
         private readonly IDeviceRepository _deviceRepository;
-        //private readonly IApplicationBuilder _applicationBuilder;
-        //private readonly IServiceProvider _serviceProvider;
-        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options)//, IDeviceRepository deviceRepository) // IServiceProvider serviceProvider
+
+        private readonly IApplicationBuilder _applicationBuilder;
+        private readonly IServiceProvider _serviceProvider;
+
+        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IDeviceRepository deviceRepository, IServiceProvider serviceProvider)
         {
             _options = options;
-            //_deviceRepository = deviceRepository;
-            //_serviceProvider = serviceProvider;
-            //_applicationBuilder = new ApplicationBuilder(_serviceProvider);
+            _deviceRepository = deviceRepository;
+
+            // test, to be removed
+            _serviceProvider = serviceProvider;
+            _applicationBuilder = new ApplicationBuilder(_serviceProvider);
         }
         public void OnCompleted()
         {
@@ -64,45 +69,26 @@ namespace Middleware.Api
 
                         var deviceData = new DeviceData
                         {
-                           Latitude = device.Latitude,
-                           Longitude = device.Longitude,
-                           Payload = device.Payload,
-                           DateReceived = device.DateReceived
+                            Latitude = device.Latitude,
+                            Longitude = device.Longitude,
+                            Payload = device.Payload,
+                            DateReceived = device.DateReceived
                         };
 
-                        //_deviceRepository.Add(deviceData); // DI error
-                        //PersistInDb<DeviceData>(deviceData);
-                    } 
+                        //await _deviceRepository.AddAsync(deviceData);
+
+                        // test - not working, the _applicationBuilder is already disposed
+                        using (var serviceScope = _applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                        {
+                            var context = serviceScope.ServiceProvider.GetRequiredService<Context<DeviceData>>();
+
+                            context.Database.EnsureCreated();
+
+                            await _deviceRepository.AddAsync(deviceData);
+                        }
+                    }
                 }
             }
         }
-
-        //private void PersistInDb<T>(object dynamicObj) where T : class
-        //{
-        //    try
-        //    {
-        //        Context<T> context;
-
-        //        using var serviceScope = _applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
-
-        //        context = serviceScope.ServiceProvider.GetRequiredService<Context<T>>();
-
-        //        context.Database.EnsureCreated();
-
-        //        try
-        //        {
-        //            context.Add((DeviceData)dynamicObj);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //}
     }
 }

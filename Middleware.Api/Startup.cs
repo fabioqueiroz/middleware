@@ -32,15 +32,18 @@ namespace Middleware.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.Configure<HttpMiddlewareInterceptor>(Configuration.GetSection(nameof(HttpMiddlewareInterceptor)));
             services.AddScoped<IDeviceRepository, DeviceRepository>();
-            services.AddSingleton<DeviceObserver>();
+            services.AddScoped<DeviceObserver>();
+
+            var test = Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString));
+            var test2 = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<Context<DeviceData>>(options =>
                options.UseSqlServer(
-                   Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString)), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
-
-            //services.AddSingleton<DeviceObserver>();
+                   //Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString)), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
+                   Configuration.GetConnectionString("DefaultConnection"), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

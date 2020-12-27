@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Middleware.Api.Models;
+using Middleware.Data;
 using Middleware.Data.Access;
+using Middleware.Data.Access.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -27,12 +29,14 @@ namespace Middleware.Api
         private readonly RequestDelegate _next;
         private readonly IApplicationBuilder _applicationBuilder;
         private readonly IServiceProvider _serviceProvider;
-   
-        public IoTListenerMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
+        //private readonly IDeviceRepository _deviceRepository;
+
+        public IoTListenerMiddleware(RequestDelegate next, IServiceProvider serviceProvider)//, IDeviceRepository deviceRepository)
         {
             _next = next;
             _serviceProvider = serviceProvider;
             _applicationBuilder = new ApplicationBuilder(_serviceProvider);
+            //_deviceRepository = deviceRepository;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -75,8 +79,7 @@ namespace Middleware.Api
                 //PersistInDb<Middleware.Api.Device>(newObj);
             }
 
-            // move logic to the observer to persist the device
-            //var device = JsonConvert.DeserializeObject<Device>(bodyString);
+            // moved logic to the observer to persist the device
 
             await _next(context);
         }
