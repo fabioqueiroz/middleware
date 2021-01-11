@@ -21,7 +21,5 @@ namespace Middleware.Data.Access
         {
             modelBuilder.Entity<T>();
         }
-
-        //public DbSet<TestData> TestDataTable { get; set; }
     }
 }

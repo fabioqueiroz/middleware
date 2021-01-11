@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.EntityFrameworkCore;
 
 namespace Middleware.Api
 {
@@ -21,19 +22,20 @@ namespace Middleware.Api
     {
         private readonly IOptions<HttpMiddlewareInterceptor> _options;
         private readonly IDeviceRepository _deviceRepository;
-
-        private readonly IApplicationBuilder _applicationBuilder;
         private readonly IServiceProvider _serviceProvider;
+        private IServiceScope _scope;
+        private DbContext _context;
 
-        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IDeviceRepository deviceRepository, IServiceProvider serviceProvider)
+        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IServiceProvider serviceProvider) // , IDeviceRepository deviceRepository
         {
             _options = options;
-            _deviceRepository = deviceRepository;
-
-            // test, to be removed
+            //_deviceRepository = deviceRepository;
             _serviceProvider = serviceProvider;
-            _applicationBuilder = new ApplicationBuilder(_serviceProvider);
+            _scope = _serviceProvider.CreateScope();
+            _context = _scope.ServiceProvider.GetRequiredService<Context<DeviceData>>();
+            _deviceRepository = _scope.ServiceProvider.GetRequiredService<IDeviceRepository>(); // artificial DI
         }
+
         public void OnCompleted()
         {
             throw new NotImplementedException();
@@ -49,6 +51,9 @@ namespace Middleware.Api
             if (value.Key == "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start")
             {
                 var httpContext = value.Value.GetType().GetProperty("HttpContext")?.GetValue(value.Value) as HttpContext;
+                var requestMethod = httpContext.Request.Method;
+                var url = httpContext.Request.Host.Value + httpContext.Request.Path.Value;
+
                 if (httpContext != null)
                 {
                     var requestBody = httpContext.Request.HttpContext.Request;
@@ -75,17 +80,11 @@ namespace Middleware.Api
                             DateReceived = device.DateReceived
                         };
 
-                        //await _deviceRepository.AddAsync(deviceData);
+                        //_context.Database.EnsureCreated();
+                        //_context.Add(deviceData);
+                        //_context.SaveChanges();
 
-                        // test - not working, the _applicationBuilder is already disposed
-                        using (var serviceScope = _applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                        {
-                            var context = serviceScope.ServiceProvider.GetRequiredService<Context<DeviceData>>();
-
-                            context.Database.EnsureCreated();
-
-                            await _deviceRepository.AddAsync(deviceData);
-                        }
+                        await _deviceRepository.AddAsync(deviceData);
                     }
                 }
             }
