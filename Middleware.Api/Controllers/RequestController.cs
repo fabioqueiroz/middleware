@@ -22,11 +22,17 @@ namespace Middleware.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok();
+            return Ok("The request reached the controller");
+        }
+
+        [HttpGet("json")]
+        public IActionResult GetJson()
+        {
+            return Json("Json test");
         }
 
         [HttpPost]
-        public IActionResult PostTest([FromBody] RequestModel requestModel)
+        public IActionResult PostTest([FromBody] Device device)
         {
             return Ok();
         }

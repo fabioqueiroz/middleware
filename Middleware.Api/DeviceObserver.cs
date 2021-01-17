@@ -54,6 +54,10 @@ namespace Middleware.Api
                 var requestMethod = httpContext.Request.Method;
                 var url = httpContext.Request.Host.Value + httpContext.Request.Path.Value;
 
+                //1 - pass delegate to middleware
+                //2 - pass a dicctionary with a<ClassType, Delegate>,
+                 //where the Classtype will be the key and the value will be the delegate
+ 
                 if (httpContext != null)
                 {
                     var requestBody = httpContext.Request.HttpContext.Request;
