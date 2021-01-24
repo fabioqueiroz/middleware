@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Data.Access", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Data", "Middleware.Data\Middleware.Data.csproj", "{D34F7A3F-475A-4D34-A0EF-CF61AD172448}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware.Client", "Middleware.Client\Middleware.Client.csproj", "{DF996D7D-E286-4864-8637-301733D3860A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Client", "Middleware.Client\Middleware.Client.csproj", "{DF996D7D-E286-4864-8637-301733D3860A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

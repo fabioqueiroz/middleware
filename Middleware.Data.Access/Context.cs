@@ -7,19 +7,19 @@ using System.Text;
 
 namespace Middleware.Data.Access
 {
-    public class Context<T> : DbContext where T : class
+    public class Context : DbContext
     {
 
-        public DbSet<T> Devices { get; set; }
+        public DbSet<Device> Devices { get; set; }
 
-        public Context(DbContextOptions<Context<T>> options)
+        public Context(DbContextOptions<Context> options)
              : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<T>();
+            modelBuilder.Entity<Device>();
         }
     }
 }

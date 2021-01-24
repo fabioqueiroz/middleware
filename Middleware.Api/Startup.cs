@@ -40,7 +40,7 @@ namespace Middleware.Api
             var test = Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString));
             var test2 = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<Context<DeviceData>>(options =>
+            services.AddDbContext<Context>(options =>
                options.UseSqlServer(
                    //Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString)), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
                    Configuration.GetConnectionString("DefaultConnection"), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
@@ -60,7 +60,6 @@ namespace Middleware.Api
 
             app.UseAuthorization();
 
-            //app.UseIoTListenerMiddleware<object>();
             app.UseIoTListenerMiddleware();
 
             app.UseEndpoints(endpoints =>

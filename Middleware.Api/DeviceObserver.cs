@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.EntityFrameworkCore;
+using Middleware.Api.Commons;
+using Middleware.Api.Models;
 
 namespace Middleware.Api
 {
@@ -24,7 +26,7 @@ namespace Middleware.Api
         private readonly IDeviceRepository _deviceRepository;
         private readonly IServiceProvider _serviceProvider;
         private IServiceScope _scope;
-        private DbContext _context;
+        //private DbContext _context;
 
         public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IServiceProvider serviceProvider) // , IDeviceRepository deviceRepository
         {
@@ -32,7 +34,7 @@ namespace Middleware.Api
             //_deviceRepository = deviceRepository;
             _serviceProvider = serviceProvider;
             _scope = _serviceProvider.CreateScope();
-            _context = _scope.ServiceProvider.GetRequiredService<Context<DeviceData>>();
+            //_context = _scope.ServiceProvider.GetRequiredService<Context<DeviceData>>();
             _deviceRepository = _scope.ServiceProvider.GetRequiredService<IDeviceRepository>(); // artificial DI
         }
 
@@ -56,8 +58,8 @@ namespace Middleware.Api
 
                 //1 - pass delegate to middleware
                 //2 - pass a dicctionary with a<ClassType, Delegate>,
-                 //where the Classtype will be the key and the value will be the delegate
- 
+                //where the Classtype will be the key and the value will be the delegate
+
                 if (httpContext != null)
                 {
                     var requestBody = httpContext.Request.HttpContext.Request;
@@ -73,22 +75,26 @@ namespace Middleware.Api
 
                         requestBody.Body.Position = 0;
 
-                        var device = JsonConvert.DeserializeObject<Device>(bodyString);
+                        var device = JsonConvert.DeserializeObject<DeviceModel>(bodyString);
                         device.DateReceived = DateTime.UtcNow;
 
-                        var deviceData = new DeviceData
+                        Func<string, DeviceModel, Device> DeviceMapper = CustomMappers.MapToDeviceDb;
+
+                        if (requestMethod.Equals("POST"))
                         {
-                            Latitude = device.Latitude,
-                            Longitude = device.Longitude,
-                            Payload = device.Payload,
-                            DateReceived = device.DateReceived
-                        };
+                            var key = string.Empty;
 
-                        //_context.Database.EnsureCreated();
-                        //_context.Add(deviceData);
-                        //_context.SaveChanges();
+                            if (httpContext.Request.Headers.ContainsKey("Postman-Token"))
+                            {
+                                key = SystemConstants.RequestOrigin.POSTMAN_TOKEN;
+                            }
+                            else if (httpContext.Request.Headers.ContainsKey("Host"))
+                            {
+                                key = SystemConstants.RequestOrigin.HOST;
+                            }
 
-                        await _deviceRepository.AddAsync(deviceData);
+                            await _deviceRepository.AddAsync(DeviceMapper(key, device));
+                        }                     
                     }
                 }
             }

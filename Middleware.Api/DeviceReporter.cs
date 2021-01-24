@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Middleware.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Middleware.Api
 {
-    public class DeviceReporter : IObserver<Device>
+    public class DeviceReporter : IObserver<DeviceModel>
     {
         private IDisposable _unsubscriber;
-        public virtual void Subscribe(IObservable<Device> provider)
+        public virtual void Subscribe(IObservable<DeviceModel> provider)
         {
             _unsubscriber = provider.Subscribe(this);
         }
@@ -26,7 +27,7 @@ namespace Middleware.Api
             throw new NotImplementedException();
         }
 
-        public void OnNext(Device value)
+        public void OnNext(DeviceModel value)
         {
             // send to the data access
         }

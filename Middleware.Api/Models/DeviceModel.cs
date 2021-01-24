@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Middleware.Api
+namespace Middleware.Api.Models
 {
-    public class Device : BaseDevice
+    public class DeviceModel : BaseDevice
     {
         public int Id { get; set; }
         public byte[] Payload { get; set; }

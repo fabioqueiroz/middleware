@@ -32,7 +32,7 @@ namespace Middleware.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostTest([FromBody] Device device)
+        public IActionResult PostTest([FromBody] DeviceModel device)
         {
             return Ok();
         }

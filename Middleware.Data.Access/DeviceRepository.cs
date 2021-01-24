@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Middleware.Data.Access
 {
-    public class DeviceRepository : BaseRepository<DeviceData>, IDeviceRepository, IDisposable
+    public class DeviceRepository : BaseRepository<Device>, IDeviceRepository, IDisposable
     {
-        public DeviceRepository(Context<DeviceData> context) : base(context)
+        public DeviceRepository(Context context) : base(context)
         {
 
         }

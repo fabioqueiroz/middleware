@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Middleware.Data.Access.Interfaces
 {
-    public interface IDeviceRepository : IRepository<DeviceData>
+    public interface IDeviceRepository : IRepository<Device>
     {
     }
 }

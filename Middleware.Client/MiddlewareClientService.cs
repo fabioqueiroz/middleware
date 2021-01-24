@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Formatting;
+using Middleware.Api.Models;
 
 namespace Middleware.Client
 {
@@ -36,7 +37,7 @@ namespace Middleware.Client
 
         public async Task CreateRequest()
         {
-            var device = new Device
+            var device = new DeviceModel
             {
                 Payload = new byte[1234],
                 Longitude = 66.8888,
@@ -47,17 +48,16 @@ namespace Middleware.Client
             //    new StringContent(JsonConvert.SerializeObject(device), Encoding.UTF8, "application/json"));
             //var response = _httpClient.PostAsJsonAsync("request",
             //    new StringContent(JsonConvert.SerializeObject(device), Encoding.UTF8, "application/json")).Result;
-            var response = _httpClient.PostAsJsonAsync("request", device);
 
-            try
-            {
-                //response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
+            var serializedDevice = JsonConvert.SerializeObject(device);
+            var request = new HttpRequestMessage(HttpMethod.Post, "request");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                throw new Exception(ex.Message);
-            }
+            request.Content = new StringContent(serializedDevice);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            using var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

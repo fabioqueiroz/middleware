@@ -11,10 +11,10 @@ namespace Middleware.Api
 {
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        internal Context<TEntity> _context;
+        internal Context _context;
         internal DbSet<TEntity> dbSet;
 
-        public BaseRepository(Context<TEntity> context)
+        public BaseRepository(Context context)
         {
             this._context = context;
             this.dbSet = context.Set<TEntity>();

@@ -88,17 +88,17 @@ namespace Middleware.Api
         {
             try
             {
-                Context<T> context;
+                Context context;
 
                 using var serviceScope = _applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
-                context = serviceScope.ServiceProvider.GetRequiredService<Context<T>>();
+                context = serviceScope.ServiceProvider.GetRequiredService<Context>();
 
                 context.Database.EnsureCreated();
 
                 try
                 {
-                    context.Add<Middleware.Api.Device>((Middleware.Api.Device)dynamicObj);
+                    context.Add<Middleware.Api.Models.DeviceModel>((Middleware.Api.Models.DeviceModel)dynamicObj);
                 }
                 catch (Exception ex)
                 {

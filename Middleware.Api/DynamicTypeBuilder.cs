@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Middleware.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,12 +43,12 @@ namespace Middleware.Api
         {
             var typeSignature = "EntityDynamicType";
             //AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeSignature), AssemblyBuilderAccess.Run);
-            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeof(Device).FullName), AssemblyBuilderAccess.Run);
+            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeof(DeviceModel).FullName), AssemblyBuilderAccess.Run);
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("EntityModule");
             //TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
             //        TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout,
             //        null);
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(Device).Name,
+            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(DeviceModel).Name,
                     TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout,
                     null);
 

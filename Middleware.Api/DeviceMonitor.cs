@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Middleware.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Middleware.Api
 {
-    public class DeviceMonitor : IObservable<Device>
+    public class DeviceMonitor : IObservable<DeviceModel>
     {
-        public readonly List<IObserver<Device>> observers;
+        public readonly List<IObserver<DeviceModel>> observers;
         public DeviceMonitor()
         {
-            observers = new List<IObserver<Device>>();
+            observers = new List<IObserver<DeviceModel>>();
         }
-        public IDisposable Subscribe(IObserver<Device> observer)
+        public IDisposable Subscribe(IObserver<DeviceModel> observer)
         {
             if (!observers.Contains(observer))
             {
@@ -22,7 +23,7 @@ namespace Middleware.Api
             return new Unsubscriber(observers, observer);
         }
 
-        public void UpdateDeviceInfo(Device device)
+        public void UpdateDeviceInfo(DeviceModel device)
         {
             foreach (var observer in observers)
             {
@@ -32,9 +33,9 @@ namespace Middleware.Api
 
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<Device>> _observers;
-            private IObserver<Device> _observer;
-            public Unsubscriber(List<IObserver<Device>> observers, IObserver<Device> observer)
+            private List<IObserver<DeviceModel>> _observers;
+            private IObserver<DeviceModel> _observer;
+            public Unsubscriber(List<IObserver<DeviceModel>> observers, IObserver<DeviceModel> observer)
             {
                 _observers = observers;
                 _observer = observer;
