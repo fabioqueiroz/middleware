@@ -37,8 +37,8 @@ namespace Middleware.Api
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<DeviceObserver>();
 
-            var test = Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString));
-            var test2 = Configuration.GetConnectionString("DefaultConnection");
+            //var test = Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString));
+            //var test2 = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<Context>(options =>
                options.UseSqlServer(

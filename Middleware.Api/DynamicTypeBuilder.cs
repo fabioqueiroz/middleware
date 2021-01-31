@@ -33,7 +33,10 @@ namespace Middleware.Api
             // The dictionary contains the property name (property.Key, string) and its value, from which we obatin the Type                
             foreach (var property in valuesDictionary)
             {
-                CreateProperty(tb, property.Key, property.Value.GetType());
+                if (property.Value != null)
+                {
+                    CreateProperty(tb, property.Key, property.Value.GetType()); 
+                }
             }
             Type objectType = tb.CreateType();
             return objectType;

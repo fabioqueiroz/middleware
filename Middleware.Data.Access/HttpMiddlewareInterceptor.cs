@@ -8,7 +8,6 @@ namespace Middleware.Data.Access
     {
         public string ConnectionString { get; set; }
         public Interceptor Interceptors { get; set; }
-        public delegate void DelegateMethod();
     }
 
     public class Interceptor

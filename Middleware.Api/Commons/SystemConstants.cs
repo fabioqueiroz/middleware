@@ -9,8 +9,22 @@ namespace Middleware.Api.Commons
     {
         public class RequestOrigin 
         {
-            public const string POSTMAN_TOKEN = "Postman-Token";
-            public const string HOST = "Host";
+            public const string PostmanToken = "Postman-Token";
+            public const string HostToken = "Host";
+        }
+
+        public sealed class RequestType
+        {
+            public const string Get = "GET";
+            public const string Post = "POST";
+            public const string Put = "PUT";
+            public const string Delete = "DELETE";
+        }
+
+        public class DelegateNames
+        {
+            public const string PostmanDelegate = "PostmanDelegate";
+            public const string HostDelegate = "HostDelegate";
         }
     }
 }

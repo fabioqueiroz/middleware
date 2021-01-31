@@ -39,9 +39,10 @@ namespace Middleware.Client
         {
             var device = new DeviceModel
             {
-                Payload = new byte[1234],
+                Payload = new byte[4] { 15, 25, 35, 45 },
                 Longitude = 66.8888,
-                Latitude = 22.4444
+                Latitude = 22.4444,
+                DelegateName = "HostDelegate"
             };
 
             //var response = await _httpClient.PostAsync("request",

@@ -12,5 +12,8 @@ namespace Middleware.Api.Models
         public byte[] Payload { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
+        public string RequestOrigin { get; set; }
+        public string RequestMethod { get; set; }
+        public string DelegateName { get; set; }
     }
 }

@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Middleware.Api
 {
-    public class IoTListenerMiddleware//<T> where T : class
+    public class IoTListenerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IApplicationBuilder _applicationBuilder;
@@ -76,7 +76,7 @@ namespace Middleware.Api
                 AssignDynamicValues(newObj, rtProperties, dynamicDictionary);
               
                 // 5) persist into the db - **** UNABLE TO CAST RUNTTIME GENERATED CLASS, EF DOES NOT RECOGNISE THE CLASS AS BEING THE SAME ****
-                //PersistInDb<Middleware.Api.Device>(newObj);
+                //PersistInDb<Device>(newObj);
             }
 
             // moved logic to the observer to persist the device
@@ -98,7 +98,7 @@ namespace Middleware.Api
 
                 try
                 {
-                    context.Add<Middleware.Api.Models.DeviceModel>((Middleware.Api.Models.DeviceModel)dynamicObj);
+                    context.Add<Device>((Device)dynamicObj);
                 }
                 catch (Exception ex)
                 {
