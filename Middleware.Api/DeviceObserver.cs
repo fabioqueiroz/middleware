@@ -51,8 +51,8 @@ namespace Middleware.Api
             if (value.Key == "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start")
             {
                 var httpContext = value.Value.GetType().GetProperty("HttpContext")?.GetValue(value.Value) as HttpContext;
-                var requestMethod = httpContext.Request.Method;
-                var url = httpContext.Request.Host.Value + httpContext.Request.Path.Value;
+                //var requestMethod = httpContext.Request.Method;
+                //var url = httpContext.Request.Host.Value + httpContext.Request.Path.Value;
 
                 if (httpContext != null)
                 {
@@ -70,25 +70,10 @@ namespace Middleware.Api
                         requestBody.Body.Position = 0;
 
                         var device = JsonConvert.DeserializeObject<DeviceModel>(bodyString);
-                        device.DateReceived = DateTime.UtcNow;
-                        device.RequestMethod = requestMethod;
 
-                        Func<DeviceModel, Device> DeviceMapper = DelegateMappers.MapToSpecificDevice;
-
-                        var requestOrigin = string.Empty;
-
-                        if (httpContext.Request.Headers.ContainsKey(SystemConstants.RequestOrigin.PostmanToken))
-                        {
-                            requestOrigin = SystemConstants.RequestOrigin.PostmanToken;
-                        }
-                        else if (httpContext.Request.Headers.ContainsKey(SystemConstants.RequestOrigin.HostToken))
-                        {
-                            requestOrigin = SystemConstants.RequestOrigin.HostToken;
-                        }
-
-                        device.RequestOrigin = requestOrigin;
+                        Func<HttpContext, DeviceModel, Device> DeviceMapper = DelegateMappers.MapToSpecificDevice;
                         
-                        await _deviceRepository.AddAsync(DeviceMapper(device));
+                        await _deviceRepository.AddAsync(DeviceMapper(httpContext, device));
                     }
                 }
             }

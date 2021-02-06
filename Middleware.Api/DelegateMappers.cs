@@ -1,4 +1,5 @@
-﻿using Middleware.Api.Commons;
+﻿using Microsoft.AspNetCore.Http;
+using Middleware.Api.Commons;
 using Middleware.Api.Models;
 using Middleware.Data;
 using System;
@@ -10,8 +11,12 @@ namespace Middleware.Api
 {
     public class DelegateMappers
     {
-        public static Device MapToSpecificDevice(DeviceModel deviceModel)
+        public static Device MapToSpecificDevice(HttpContext httpContext, DeviceModel deviceModel)
         {
+            deviceModel.DateReceived = DateTime.UtcNow;
+            deviceModel.RequestMethod = httpContext.Request.Method;
+            deviceModel.RequestOrigin = GetRequestOrigin(httpContext);
+
             var DeviceResult = new Device();
 
             if (deviceModel.RequestMethod.Equals(SystemConstants.RequestType.Post))
@@ -28,6 +33,22 @@ namespace Middleware.Api
             }
 
             return DeviceResult;
+        }
+
+        private static string GetRequestOrigin(HttpContext httpContext)
+        {
+            var requestOrigin = string.Empty;
+
+            if (httpContext.Request.Headers.ContainsKey(SystemConstants.RequestOrigin.PostmanToken))
+            {
+                requestOrigin = SystemConstants.RequestOrigin.PostmanToken;
+            }
+            else if (httpContext.Request.Headers.ContainsKey(SystemConstants.RequestOrigin.HostToken))
+            {
+                requestOrigin = SystemConstants.RequestOrigin.HostToken;
+            }
+
+            return requestOrigin;
         }
 
         public static Device MapToPostmanDevice(DeviceModel deviceModel)
