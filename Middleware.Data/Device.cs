@@ -12,5 +12,6 @@ namespace Middleware.Data
         public double Latitude { get; set; }
         public DateTime DateReceived { get; set; }
         public string RequestOrigin { get; set; }
+        public int Type { get; set; }
     }
 }

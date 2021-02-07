@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Data", "Middlewa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Client", "Middleware.Client\Middleware.Client.csproj", "{DF996D7D-E286-4864-8637-301733D3860A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware.Services", "Middleware.Services\Middleware.Services.csproj", "{F7345101-1B02-494C-8811-706101B0D438}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware.Business", "Middleware.Business\Middleware.Business.csproj", "{248BDA1D-D7B9-47A0-9BC1-7CE9B552A32A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{DF996D7D-E286-4864-8637-301733D3860A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF996D7D-E286-4864-8637-301733D3860A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF996D7D-E286-4864-8637-301733D3860A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7345101-1B02-494C-8811-706101B0D438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7345101-1B02-494C-8811-706101B0D438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7345101-1B02-494C-8811-706101B0D438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7345101-1B02-494C-8811-706101B0D438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248BDA1D-D7B9-47A0-9BC1-7CE9B552A32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248BDA1D-D7B9-47A0-9BC1-7CE9B552A32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248BDA1D-D7B9-47A0-9BC1-7CE9B552A32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248BDA1D-D7B9-47A0-9BC1-7CE9B552A32A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

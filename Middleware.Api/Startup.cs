@@ -16,6 +16,8 @@ using Microsoft.Extensions.Logging;
 using Middleware.Data;
 using Middleware.Data.Access;
 using Middleware.Data.Access.Interfaces;
+using Middleware.Services;
+using Middleware.Services.Interfaces;
 
 namespace Middleware.Api
 {
@@ -35,6 +37,7 @@ namespace Middleware.Api
             services.AddControllers().AddNewtonsoftJson();
             services.Configure<HttpMiddlewareInterceptor>(Configuration.GetSection(nameof(HttpMiddlewareInterceptor)));
             services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IDeviceService, DeviceService>();
             services.AddScoped<DeviceObserver>();
 
             //var test = Configuration.GetConnectionString(nameof(HttpMiddlewareInterceptor.ConnectionString));

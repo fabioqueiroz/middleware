@@ -18,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Middleware.Api.Commons;
 using Middleware.Api.Models;
 using static Middleware.Data.Access.HttpMiddlewareInterceptor;
+using Middleware.Services.Interfaces;
+using Middleware.Business.Models;
 
 namespace Middleware.Api
 {
@@ -27,13 +29,15 @@ namespace Middleware.Api
         private readonly IDeviceRepository _deviceRepository;
         private readonly IServiceProvider _serviceProvider;
         private IServiceScope _scope;
+        private readonly IDeviceService _deviceService;
 
-        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IServiceProvider serviceProvider)
+        public DeviceObserver(IOptions<HttpMiddlewareInterceptor> options, IServiceProvider serviceProvider, IDeviceService deviceService)
         {
             _options = options;
             _serviceProvider = serviceProvider;
             _scope = _serviceProvider.CreateScope();
             _deviceRepository = _scope.ServiceProvider.GetRequiredService<IDeviceRepository>(); // artificial DI
+            _deviceService = deviceService;
         }
 
         public void OnCompleted()
@@ -69,11 +73,15 @@ namespace Middleware.Api
 
                         requestBody.Body.Position = 0;
 
-                        var device = JsonConvert.DeserializeObject<DeviceModel>(bodyString);
-
-                        Func<HttpContext, DeviceModel, Device> DeviceMapper = DelegateMappers.MapToSpecificDevice;
+                        //var device = JsonConvert.DeserializeObject<DeviceModel>(bodyString);
+                       
+                        //Func<HttpContext, DeviceModel, Device> DeviceMapper = DelegateMappers.MapToSpecificDevice;
                         
-                        await _deviceRepository.AddAsync(DeviceMapper(httpContext, device));
+                        //await _deviceRepository.AddAsync(DeviceMapper(httpContext, device));
+
+                        var deviceBusinessModel = JsonConvert.DeserializeObject<DeviceBusinessModel>(bodyString);
+                        _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+
                     }
                 }
             }
