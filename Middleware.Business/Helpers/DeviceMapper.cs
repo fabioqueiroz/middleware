@@ -10,23 +10,26 @@ namespace Middleware.Business.Helpers
 {
     public class DeviceMapper
     {
-        public static Device MapToSpecificDevice(HttpContext httpContext, DeviceBusinessModel deviceModel)
+        public static Device MapToSpecificDevice(HttpContext httpContext, DeviceBusinessModel deviceBusinessModel)
         {
-            deviceModel.DateReceived = DateTime.UtcNow;
-            deviceModel.RequestMethod = httpContext.Request.Method;
-            deviceModel.RequestOrigin = GetRequestOrigin(httpContext);
+            deviceBusinessModel.DateReceived = DateTime.UtcNow;
+            deviceBusinessModel.RequestMethod = httpContext.Request.Method;
+            deviceBusinessModel.RequestOrigin = GetRequestOrigin(httpContext);
 
             var deviceResult = new Device();
 
-            if (deviceModel.RequestMethod.Equals(BusinessConstants.RequestType.Post))
+            if (deviceBusinessModel.RequestMethod.Equals(BusinessConstants.RequestType.Post))
             {
-                switch (deviceModel.DelegateName)
+                switch (deviceBusinessModel.DelegateName)
                 {
                     case BusinessConstants.DelegateNames.PostmanDelegate:
-                        deviceResult = MapToPostmanDevice(deviceModel);
+                        deviceResult = MapToPostmanDevice(deviceBusinessModel);
                         break;
                     case BusinessConstants.DelegateNames.HostDelegate:
-                        deviceResult = MapToHostDevice(deviceModel);
+                        deviceResult = MapToHostDevice(deviceBusinessModel);
+                        break;
+                    default:
+                        deviceResult = MapToDefaultDevice(deviceBusinessModel);
                         break;
                 }
             }
@@ -49,31 +52,65 @@ namespace Middleware.Business.Helpers
             return requestOrigin;
         }
 
-        public static Device MapToPostmanDevice(DeviceBusinessModel DeviceBusinessModel)
+        public static Device MapToPostmanDevice(DeviceBusinessModel deviceBusinessModel)
         {
-            var deviceToReturn = MapIncomingModelToDevice(DeviceBusinessModel);
+            var deviceToReturn = MapIncomingModelToDevice(deviceBusinessModel);
             // perform specifc actions/bindings for this type of device
             deviceToReturn.Type = (int)TypeEnum.Postman;
             return deviceToReturn;
         }
 
-        public static Device MapToHostDevice(DeviceBusinessModel DeviceBusinessModel)
+        public static Device MapToHostDevice(DeviceBusinessModel deviceBusinessModel)
         {
-            var deviceToReturn = MapIncomingModelToDevice(DeviceBusinessModel);
+            var deviceToReturn = MapIncomingModelToDevice(deviceBusinessModel);
             // perform specifc actions/bindings for this type of device
             deviceToReturn.Type = (int)TypeEnum.Host;
             return deviceToReturn;
         }
 
-        private static Device MapIncomingModelToDevice(DeviceBusinessModel DeviceBusinessModel)
+        public static Device MapToDefaultDevice(DeviceBusinessModel deviceBusinessModel)
+        {
+            var deviceToReturn = MapIncomingModelToDevice(deviceBusinessModel);
+            // perform specifc actions/bindings for this type of device
+            deviceToReturn.Type = (int)TypeEnum.Default;
+            return deviceToReturn;
+        }
+
+        private static Device MapIncomingModelToDevice(DeviceBusinessModel deviceBusinessModel)
         {
             return new Device
             {
-                Latitude = DeviceBusinessModel.Location.Latitude,
-                Longitude = DeviceBusinessModel.Location.Longitude,
-                Payload = DeviceBusinessModel.Payload,
-                DateReceived = DeviceBusinessModel.DateReceived,
-                RequestOrigin = DeviceBusinessModel.RequestOrigin
+                DeviceId = deviceBusinessModel.DeviceId,
+                DeviceName = deviceBusinessModel.DeviceName,
+                SatelliteCapable = deviceBusinessModel.SatelliteCapable,
+                SequenceNumber = deviceBusinessModel.SequenceNumber,
+                LastCom = deviceBusinessModel.LastCom,
+                State = deviceBusinessModel.State,
+                ComState = deviceBusinessModel.ComState,
+                Pac = deviceBusinessModel.Pac,
+                Latitude = deviceBusinessModel.Location.Latitude,
+                Longitude = deviceBusinessModel.Location.Longitude,
+                DeviceTypeId = deviceBusinessModel.DeviceType.DeviceTypeId,
+                GroupId = deviceBusinessModel.Group.GroupId,
+                Lqi = deviceBusinessModel.Lqi,
+                ActivationTime = deviceBusinessModel.ActivationTime,
+                TokenState = deviceBusinessModel.Token.State,
+                TokenDetailMessage = deviceBusinessModel.Token.DetailMessage,
+                TokenEnd = deviceBusinessModel.Token.End,
+                ContractId = deviceBusinessModel.Contract.ContractId,
+                CreationTime = deviceBusinessModel.CreationTime,
+                ModemCertificateId = deviceBusinessModel.ModemCertificate.ModemCertificateId,
+                Prototype = deviceBusinessModel.Prototype,
+                ProductCertificateId = deviceBusinessModel.ProductCertificate.ProductCertificateId,
+                AutomaticRenewal = deviceBusinessModel.AutomaticRenewal,
+                AutomaticRenewalStatus = deviceBusinessModel.AutomaticRenewalStatus,
+                CreatedBy = deviceBusinessModel.CreatedBy,
+                LastEditionTime = deviceBusinessModel.LastEditionTime,
+                LastEditedBy = deviceBusinessModel.LastEditedBy,
+                Activable = deviceBusinessModel.Activable,
+                Payload = deviceBusinessModel.Payload,
+                DateReceived = deviceBusinessModel.DateReceived,
+                RequestOrigin = deviceBusinessModel.RequestOrigin
             };
         }
     }

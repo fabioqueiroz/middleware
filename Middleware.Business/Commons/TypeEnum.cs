@@ -6,8 +6,9 @@ namespace Middleware.Business.Commons
 {
     public enum TypeEnum
     {
-        Host = 0,
-        Postman = 1,
-        Sigfox = 2
+        Default = 0,
+        Host = 1,
+        Postman = 2,
+        Sigfox = 3
     }
 }

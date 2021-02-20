@@ -86,10 +86,10 @@ namespace Middleware.Api
 
                         // V2
                         var dataBusinessModel = JsonConvert.DeserializeObject<DataBusinessModel>(bodyString);
-                        //foreach (var deviceBusinessModel in dataBusinessModel.DeviceBusinessModels)
-                        //{
-                        //    _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
-                        //}
+                        foreach (var deviceBusinessModel in dataBusinessModel.DeviceBusinessModels)
+                        {
+                            _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+                        }
                     }
                 }
             }
