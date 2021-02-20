@@ -69,8 +69,8 @@ namespace Middleware.Business.Helpers
         {
             return new Device
             {
-                Latitude = DeviceBusinessModel.Latitude,
-                Longitude = DeviceBusinessModel.Longitude,
+                Latitude = DeviceBusinessModel.Location.Latitude,
+                Longitude = DeviceBusinessModel.Location.Longitude,
                 Payload = DeviceBusinessModel.Payload,
                 DateReceived = DeviceBusinessModel.DateReceived,
                 RequestOrigin = DeviceBusinessModel.RequestOrigin

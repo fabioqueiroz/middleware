@@ -74,14 +74,22 @@ namespace Middleware.Api
                         requestBody.Body.Position = 0;
 
                         //var device = JsonConvert.DeserializeObject<DeviceModel>(bodyString);
-                       
+
                         //Func<HttpContext, DeviceModel, Device> DeviceMapper = DelegateMappers.MapToSpecificDevice;
-                        
+
                         //await _deviceRepository.AddAsync(DeviceMapper(httpContext, device));
 
-                        var deviceBusinessModel = JsonConvert.DeserializeObject<DeviceBusinessModel>(bodyString);
-                        _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+                        // service layer
+                        // V1
+                        //var deviceBusinessModel = JsonConvert.DeserializeObject<DeviceBusinessModel>(bodyString);
+                        //_deviceService.AddNewDevice(httpContext, deviceBusinessModel);
 
+                        // V2
+                        var dataBusinessModel = JsonConvert.DeserializeObject<DataBusinessModel>(bodyString);
+                        //foreach (var deviceBusinessModel in dataBusinessModel.DeviceBusinessModels)
+                        //{
+                        //    _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+                        //}
                     }
                 }
             }
