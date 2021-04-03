@@ -79,20 +79,23 @@ namespace Middleware.Api
 
                         //await _deviceRepository.AddAsync(DeviceMapper(httpContext, device));
 
-                        // service layer
-                        // V1
-                        //var deviceBusinessModel = JsonConvert.DeserializeObject<DeviceBusinessModel>(bodyString);
-                        //_deviceService.AddNewDevice(httpContext, deviceBusinessModel);
 
-                        // V2
-                        var dataBusinessModel = JsonConvert.DeserializeObject<DataBusinessModel>(bodyString);
-                        if (dataBusinessModel.DeviceBusinessModels != null)
+                        // V1
+                        var deviceBusinessModel = JsonConvert.DeserializeObject<DeviceBusinessModel>(bodyString);
+                        if (deviceBusinessModel != null)
                         {
-                            foreach (var deviceBusinessModel in dataBusinessModel.DeviceBusinessModels)
-                            {
-                                _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
-                            } 
-                        }                       
+                            _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+                        }
+
+                        //// V2
+                        //var dataBusinessModel = JsonConvert.DeserializeObject<DataBusinessModel>(bodyString);
+                        //if (dataBusinessModel.DeviceBusinessModels != null)
+                        //{
+                        //    foreach (var deviceBusinessModel in dataBusinessModel.DeviceBusinessModels)
+                        //    {
+                        //        _deviceService.AddNewDevice(httpContext, deviceBusinessModel);
+                        //    }
+                        //}
                     }
                 }
             }

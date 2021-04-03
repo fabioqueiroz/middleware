@@ -78,6 +78,14 @@ namespace Middleware.Business.Helpers
 
         private static Device MapIncomingModelToDevice(DeviceBusinessModel deviceBusinessModel)
         {
+            deviceBusinessModel.Location ??= new Location();
+            deviceBusinessModel.DeviceType ??= new DeviceType();
+            deviceBusinessModel.Group ??= new Group();
+            deviceBusinessModel.Token ??= new Token();
+            deviceBusinessModel.Contract ??= new Contract();
+            deviceBusinessModel.ModemCertificate ??= new ModemCertificate();
+            deviceBusinessModel.ProductCertificate ??= new ProductCertificate();
+
             return new Device
             {
                 DeviceId = deviceBusinessModel.DeviceId,
@@ -110,7 +118,12 @@ namespace Middleware.Business.Helpers
                 Activable = deviceBusinessModel.Activable,
                 Payload = deviceBusinessModel.Payload,
                 DateReceived = deviceBusinessModel.DateReceived,
-                RequestOrigin = deviceBusinessModel.RequestOrigin
+                RequestOrigin = deviceBusinessModel.RequestOrigin,
+                Data = deviceBusinessModel.Data,
+                SeqNumber = deviceBusinessModel.SeqNumber,
+                SigfoxDeviceTypeId = deviceBusinessModel.SigfoxDeviceTypeId,
+                Acknowledgment = deviceBusinessModel.Acknowledgment,
+                LongPolling = deviceBusinessModel.LongPolling
             };
         }
     }

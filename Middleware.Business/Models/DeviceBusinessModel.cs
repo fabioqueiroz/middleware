@@ -69,8 +69,21 @@ namespace Middleware.Business.Models
         public string RequestOrigin { get; set; }
         public string RequestMethod { get; set; }
         public string DelegateName { get; set; }
+        [JsonProperty("time")]
         public DateTime DateReceived { get; set; }
         public TypeEnum Type { get; set; }
+
+
+        [JsonProperty("data")]
+        public string Data { get; set; }
+        [JsonProperty("seqNumber")]
+        public double SeqNumber { get; set; }
+        [JsonProperty("deviceTypeId")]
+        public int SigfoxDeviceTypeId { get; set; }
+        [JsonProperty("ack")]
+        public string Acknowledgment { get; set; }
+        [JsonProperty("longPolling")]
+        public int LongPolling { get; set; }
     }
 
     

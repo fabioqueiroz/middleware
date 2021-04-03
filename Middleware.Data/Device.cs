@@ -40,5 +40,11 @@ namespace Middleware.Data
         public DateTime DateReceived { get; set; }
         public string RequestOrigin { get; set; }
         public int Type { get; set; }
+
+        public string Data { get; set; }
+        public double SeqNumber { get; set; }
+        public int SigfoxDeviceTypeId { get; set; }
+        public string Acknowledgment { get; set; }
+        public int LongPolling { get; set; }
     }
 }
