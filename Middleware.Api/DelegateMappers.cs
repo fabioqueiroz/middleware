@@ -72,7 +72,7 @@ namespace Middleware.Api
                 Latitude = deviceModel.Latitude,
                 Longitude = deviceModel.Longitude,
                 Payload = deviceModel.Payload,
-                DateReceived = deviceModel.DateReceived,
+                DateReceived = deviceModel.DateReceived.ToString(),
                 RequestOrigin = deviceModel.RequestOrigin
             };
         }

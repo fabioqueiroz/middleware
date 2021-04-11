@@ -10,6 +10,7 @@ namespace Middleware.Business.Commons
         {
             public const string PostmanToken = "Postman-Token";
             public const string HostToken = "Host";
+            public const string SigfoxToken = "SIGFOX";
         }
 
         public sealed class RequestType

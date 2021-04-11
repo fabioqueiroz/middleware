@@ -12,7 +12,6 @@ namespace Middleware.Business.Models
     /// </summary>
     public class DeviceBusinessModel
     {
-        public int Id { get; set; }
         [JsonProperty("id")]
         public string DeviceId { get; set; }
         [JsonProperty("name")]
@@ -70,7 +69,7 @@ namespace Middleware.Business.Models
         public string RequestMethod { get; set; }
         public string DelegateName { get; set; }
         [JsonProperty("time")]
-        public DateTime DateReceived { get; set; }
+        public string DateReceived { get; set; }
         public TypeEnum Type { get; set; }
 
 
@@ -79,11 +78,11 @@ namespace Middleware.Business.Models
         [JsonProperty("seqNumber")]
         public double SeqNumber { get; set; }
         [JsonProperty("deviceTypeId")]
-        public int SigfoxDeviceTypeId { get; set; }
+        public string SigfoxDeviceTypeId { get; set; }
         [JsonProperty("ack")]
         public string Acknowledgment { get; set; }
         [JsonProperty("longPolling")]
-        public int LongPolling { get; set; }
+        public string LongPolling { get; set; }
     }
 
     

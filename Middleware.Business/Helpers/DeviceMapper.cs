@@ -12,7 +12,7 @@ namespace Middleware.Business.Helpers
     {
         public static Device MapToSpecificDevice(HttpContext httpContext, DeviceBusinessModel deviceBusinessModel)
         {
-            deviceBusinessModel.DateReceived = DateTime.UtcNow;
+            deviceBusinessModel.DateReceived = DateTime.UtcNow.ToString();
             deviceBusinessModel.RequestMethod = httpContext.Request.Method;
             deviceBusinessModel.RequestOrigin = GetRequestOrigin(httpContext);
 
@@ -43,6 +43,10 @@ namespace Middleware.Business.Helpers
             if (httpContext.Request.Headers.ContainsKey(BusinessConstants.RequestOrigin.PostmanToken))
             {
                 requestOrigin = BusinessConstants.RequestOrigin.PostmanToken;
+            }
+            else if (httpContext.Request.Headers.ContainsKey(BusinessConstants.RequestOrigin.SigfoxToken))
+            {
+                requestOrigin = BusinessConstants.RequestOrigin.SigfoxToken;
             }
             else if (httpContext.Request.Headers.ContainsKey(BusinessConstants.RequestOrigin.HostToken))
             {

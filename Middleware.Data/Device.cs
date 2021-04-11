@@ -37,14 +37,14 @@ namespace Middleware.Data
         public bool? Activable { get; set; }
 
         public byte[] Payload { get; set; }
-        public DateTime DateReceived { get; set; }
+        public string DateReceived { get; set; }
         public string RequestOrigin { get; set; }
         public int Type { get; set; }
 
         public string Data { get; set; }
         public double SeqNumber { get; set; }
-        public int SigfoxDeviceTypeId { get; set; }
+        public string SigfoxDeviceTypeId { get; set; }
         public string Acknowledgment { get; set; }
-        public int LongPolling { get; set; }
+        public string LongPolling { get; set; }
     }
 }

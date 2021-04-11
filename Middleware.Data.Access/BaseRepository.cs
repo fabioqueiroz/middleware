@@ -103,7 +103,7 @@ namespace Middleware.Api
             try
             {
                 _context.Add<TEntity>(entity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return entity;
             }

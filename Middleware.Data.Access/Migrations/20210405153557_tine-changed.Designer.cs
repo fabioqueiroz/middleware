@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Middleware.Data.Access;
 
 namespace Middleware.Data.Access.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210405153557_tine-changed")]
+    partial class tinechanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +85,8 @@ namespace Middleware.Data.Access.Migrations
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
 
-                    b.Property<string>("LongPolling")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LongPolling")
+                        .HasColumnType("int");
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
@@ -119,8 +121,8 @@ namespace Middleware.Data.Access.Migrations
                     b.Property<double>("SequenceNumber")
                         .HasColumnType("float");
 
-                    b.Property<string>("SigfoxDeviceTypeId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SigfoxDeviceTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
